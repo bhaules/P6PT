@@ -20,13 +20,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Reload
 ; Return
 ; ^!#e::Edit
-
-; Gui, Add, Edit, w600  ; Add a fairly wide edit control at the top of the window.
-; Gui, Add, Text, Section, First Name:  ; Save this control's position and start a new section.
-; Gui, Add, Text,, Last Name:
-; Gui, Add, Edit, ys  ; Start a new column within this section.
-; Gui, Add, Edit
-; Gui, Show
+Menu, Tray, Icon, Icons/P6PT.ico
 
 Gui, New, hwndhGui AlwaysOnTop Resize MinSize ; always on top
 Gui, Add, CheckBox, Checked vEnterGoes1Row gCheckSub, Enter - Enter and Go Down 1 row
@@ -40,9 +34,9 @@ return
 GuiClose:
 ExitApp
 
-; CheckSub:
-; Gui, Submit, NoHide
-; return
+CheckSub:
+Gui, Submit, NoHide
+return
 ;;=============================================================================================
 ; Enter presses Enter and goes dowon one row
 ;=============================================================================================
