@@ -23,9 +23,26 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 Menu, Tray, Icon, Icons/P6PT.ico
 
 Gui, New, hwndhGui AlwaysOnTop Resize MinSize ; always on top
-Gui, Add, CheckBox, Checked vEnterGoes1Row gCheckSub, Enter - Enter and Go Down 1 row
-Gui, Add, CheckBox, Checked vActivatePredWindow gCheckSub, Alt+Q - activates predecessor window
-Gui, Add, CheckBox, Checked vCheck2 gCheckSub Checked, F2
+Gui, Add, CheckBox, Checked vEnterGoes1Row gCheckSub, Enter - Enter and go down 1 row
+Gui, Add, CheckBox, Checked vScrollHorisontalWithMouse gCheckSub, Scroll left/right with the mouse
+Gui, Add, CheckBox, Checked vScrollOnePageWithMouse gCheckSub, Scroll Scroll one page up/down with the mouse
+Gui, Add, CheckBox, Checked vActivatePredWindow gCheckSub, Alt+Q - Activates predecessor window
+Gui, Add, CheckBox, Checked vActivateSuccWindow gCheckSub, Alt+W - Activates successor window
+Gui, Add, CheckBox, Checked vActivateMainWindow gCheckSub, Alt+E - Activates main P6 window
+Gui, Add, CheckBox, Checked vNextActivity gCheckSub, Alt+1 - Goes down to the next activity ; and selects the predecessor window
+Gui, Add, CheckBox, Checked vPreviousActivity gCheckSub, Alt+2 - Goes up to the next activity ; and selects the predecessor window
+; Gui, Add, CheckBox, Checked vTogglePredSucc gCheckSub, Tab - Toggles focus between Pred & Succ Window
+Gui, Add, CheckBox, Checked vDurationInWeeks gCheckSub, Ctrl+Shift+W - Opens User Preferences and changes duration in weeks
+Gui, Add, CheckBox, Checked vDurationInDays gCheckSub, Ctrl+Shift+D - Opens User Preferences and changes duration in days
+Gui, Add, CheckBox, Checked vDisolve gCheckSub, F6 - Disolves an activity (Alt+E+O)
+Gui, Add, CheckBox, Checked vLink, Ctrl+Q - Links 2 activities (Alt+E+K)
+Gui, Add, CheckBox, Checked vRenameEnd, F2 - Renames field and goes to the end of the text
+Gui, Add, CheckBox, Checked vDelete, Shift+Del - Deletes item without confirmation
+Gui, Add, CheckBox, Checked vCollapseAll, Alt+` (Backtick) - Collapses all items
+Gui, Add, CheckBox, Checked vExpand, ` (Backtick) - Expands the selected node
+Gui, Add, CheckBox, Checked vDelOneWord, Ctrl+Backspace - Deletes one word at a time
+Gui, Add, CheckBox, Checked vSchedWihoutPrompts, F9 - Schedules the project without prompts
+Gui, Add, CheckBox, Checked vFloatPaths, Ctrl+F9 - Calculates Float Path to copied value
 Gui, Show
 Gui, +LastFound
 Gui, Submit, NoHide
@@ -56,22 +73,11 @@ Send, {Down} ; Sends down after 100 ms
 return
 #IfWinActive
 
-MsgBox, Enter Hotkey was pressed in P6.
-return
-#If
-; #If (Check2 && WinActive("ahk_class TDevMainForm"))
-
-; F2::
-; MsgBox, F2 Hotkey was pressed in P6.
-; return
-; #If
-
-; #If
 ;;=============================================================================================
 ; Alt+q goes to the predecessors window
 ;=============================================================================================
 
-#If (ActivatePredeWindow && WinActive("ahk_exe P6.exe"))
+#If (ActivatePredWindow && WinActive("ahk_class TDevxMainForm"))
 !q::
 ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; click the button
 return
@@ -79,11 +85,11 @@ return
 ;;=============================================================================================
 ; Alt+w goes to the successors window
 ;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
+#If (ActivateSuccWindow && WinActive("ahk_class TDevxMainForm"))
 !w::
 ControlClick, TCVirtualQueryGrid1, ahk_class TDevxMainForm, , , 1 ; click the button
 return
-#IfWinActive
+#If
 ;;=============================================================================================
 ; Alt+e goes to the main activity window
 ;=============================================================================================
