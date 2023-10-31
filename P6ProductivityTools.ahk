@@ -31,7 +31,10 @@ Gui, Add, CheckBox, Checked vActivateSuccWindow gCheckSub, Alt+W - Activates suc
 Gui, Add, CheckBox, Checked vActivateMainWindow gCheckSub, Alt+E - Activates main P6 window
 Gui, Add, CheckBox, Checked vNextActivity gCheckSub, Alt+1 - Goes down to the next activity ; and selects the predecessor window
 Gui, Add, CheckBox, Checked vPreviousActivity gCheckSub, Alt+2 - Goes up to the next activity ; and selects the predecessor window
+Gui, Add, CheckBox, Checked vDoubleClick gCheckSub, Double Click - Goes up to the selected pred/succ
 ; Gui, Add, CheckBox, Checked vTogglePredSucc gCheckSub, Tab - Toggles focus between Pred & Succ Window
+Gui, Add, CheckBox, Checked vScrollLeftRight gCheckSub, Scroll left right with the mouse
+Gui, Add, CheckBox, Checked vRightClicknScroll gCheckSub, Press right click & scroll to scroll one page 
 Gui, Add, CheckBox, Checked vDurationInWeeks gCheckSub, Ctrl+Shift+W - Opens User Preferences and changes duration in weeks
 Gui, Add, CheckBox, Checked vDurationInDays gCheckSub, Ctrl+Shift+D - Opens User Preferences and changes duration in days
 Gui, Add, CheckBox, Checked vDisolve gCheckSub, F6 - Disolves an activity (Alt+E+O)
@@ -57,12 +60,12 @@ return
 ;;=============================================================================================
 ; Enter presses Enter and goes dowon one row
 ;=============================================================================================
-#If (Check2 && WinActive("ahk_exe PM.exe"))
+; #If (Check2 && WinActive("ahk_exe PM.exe"))
 
-F2::
-MsgBox, F2 Hotkey was pressed in P6.
-return
-#If
+; F2::
+; MsgBox, F2 Hotkey was pressed in P6.
+; return
+; #If
 
 #If (EnterGoes1Row && WinActive("ahk_exe PM.exe"))
 
@@ -93,7 +96,7 @@ return
 ;;=============================================================================================
 ; Alt+e goes to the main activity window
 ;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
+#If (ActivateMainWindow && WinActive("ahk_class TDevxMainForm"))
 !e::
 SetControlDelay, -1 ; set control delay to zero
 ControlClick, TCUltraButton27, ahk_class TDevxMainForm, , , 1 ; click the button
@@ -101,11 +104,11 @@ sleep, 100
 Send, {Tab} ; activates the activity window
 Sleep, 200
 return
-#IfWinActive
+#If
 ;;=============================================================================================
 ; Alt+1 goes to the next activity
 ;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
+#If (NextActivity && WinActive("ahk_class TDevxMainForm"))
 !1::
 SetControlDelay, -1 ; set control delay to zero
 ControlClick, TCUltraButton27, ahk_class TDevxMainForm, , , 1 ; click the button
@@ -114,9 +117,12 @@ Send, {Tab} ; activates the activity window
 Sleep, 200
 ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; click the button
 return
-#IfWinActive
+#If
 
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
+;;=============================================================================================
+; Alt+2 goes to the next previous activity
+;=============================================================================================
+#If (PreviousActivity && WinActive("ahk_class TDevxMainForm"))
 !2::
 SetControlDelay, -1 ; set control delay to zero
 ControlClick, TCUltraButton28, ahk_class TDevxMainForm, , , 1 ; click the button
@@ -124,11 +130,11 @@ sleep, 100
 Send, {Tab} ; activates the activity window
 ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; click the button
 return
-#IfWinActive
+#If
 ;=============================================================================================
 ; double click in the predecessors/ successors takes you to the pred/successor 
 ;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
+#If (DoubleClick && WinActive("ahk_class TDevxMainForm"))
 ~LButton::
 If (A_PriorHotKey = A_ThisHotKey and A_TimeSincePriorHotkey < 200)
 	{
@@ -147,7 +153,7 @@ If (A_PriorHotKey = A_ThisHotKey and A_TimeSincePriorHotkey < 200)
 		}
 	}
 return
-#IfWinActive
+#If
 ;=============================================================================================
 ;Tab goes to either predecessors or successors
 ;=============================================================================================
@@ -161,40 +167,40 @@ return
 		;{ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; Go to Predecessors
 		;return
 		;}
-;=============================================================================================
-;Ctrl+Alt+x goes to predecessors
-;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; Check if Window is active
-^!z:: ;Ctrl + Alt + z - Go to Predecessors
-SetControlDelay, -1 ; set control delay to zero
-ControlClick, TCUltraButton34, ahk_class TDevxMainForm, , , 1 ; click the button
-sleep, 1000
-ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; click the button
-return
-#IfWinActive
+; ;=============================================================================================
+; ;Ctrl+Alt+x goes to predecessors
+; ;=============================================================================================
+; #If (DoubleClick && WinActive("ahk_class TDevxMainForm"))
+; ^!z:: ;Ctrl + Alt + z - Go to Predecessors
+; SetControlDelay, -1 ; set control delay to zero
+; ControlClick, TCUltraButton34, ahk_class TDevxMainForm, , , 1 ; click the button
+; sleep, 1000
+; ControlClick, TCVirtualQueryGrid2, ahk_class TDevxMainForm, , , 1 ; click the button
+; return
+; #IfWinActive
 
-;=============================================================================================
-;Ctrl+Alt+x goes to successors
-;=============================================================================================
-#IfWinActive, ahk_class TDevxMainForm ; activate the window
-^!x:: ;Ctrl + Alt + x - Go to Sucessors
-SetControlDelay, -1 ; set control delay to zero
-ControlClick, TCUltraButton29, ahk_class TDevxMainForm, , , 1 ; click the button
-sleep, 1000
-ControlClick, TCVirtualQueryGrid1, ahk_class TDevxMainForm, , , 1 ; click the button
-return
-#IfWinActive
+; ;=============================================================================================
+; ;Ctrl+Alt+x goes to successors
+; ;=============================================================================================
+; #IfWinActive, ahk_class TDevxMainForm ; activate the window
+; ^!x:: ;Ctrl + Alt + x - Go to Sucessors
+; SetControlDelay, -1 ; set control delay to zero
+; ControlClick, TCUltraButton29, ahk_class TDevxMainForm, , , 1 ; click the button
+; sleep, 1000
+; ControlClick, TCVirtualQueryGrid1, ahk_class TDevxMainForm, , , 1 ; click the button
+; return
+; #IfWinActive
 
 
 
 ;=============================================================================================
 ;Scroll Left/ Right in P6 with mouse
 ;=============================================================================================
-; #If MouseIsOver("ahk_class TDevxMainForm")
-; WheelRight::+WheelDown
-; WheelLeft::+WheelUp
-; #if
-; return
+#If (ScrollLeftRight && MouseIsOver("ahk_class TDevxMainForm"))
+WheelRight::+WheelDown
+WheelLeft::+WheelUp
+#if
+return
 ;=============================================================================================
 ;Mouse Back and Forward button goes down/ up one page at a time 
 ;=============================================================================================
@@ -206,12 +212,12 @@ return
 ;=============================================================================================
 ;Hold Right Click and scroll up/ down - scrolls a whole screen
 ;=============================================================================================
-#IfWinActive ahk_class TDevxMainForm
+#If (RightClicknScroll && WinActive("ahk_class TDevxMainForm"))
 ;RButton::RButton
 XButton1 & WheelDown::PgDn
 XButton1 & WheelUp::PgUp
 return
-#IfWinActive
+#If
 ;=============================================================================================
 ;Keyboard Volume_Down scrolls down in P6
 ;=============================================================================================
