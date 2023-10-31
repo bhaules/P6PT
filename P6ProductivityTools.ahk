@@ -37,6 +37,7 @@ Gui, Add, CheckBox, Checked vScrollLeftRight gCheckSub, Scroll left right with t
 Gui, Add, CheckBox, Checked vRightClicknScroll gCheckSub, Press right click & scroll to scroll one page 
 Gui, Add, CheckBox, Checked vDurationInWeeks gCheckSub, Ctrl+Shift+W - Opens User Preferences and changes duration in weeks
 Gui, Add, CheckBox, Checked vDurationInDays gCheckSub, Ctrl+Shift+D - Opens User Preferences and changes duration in days
+Gui, Add, CheckBox, Checked vOpenLayouts gCheckSub, Ctrl+Shift+A - Opens the Layouts window
 Gui, Add, CheckBox, Checked vDisolve gCheckSub, F6 - Disolves an activity (Alt+E+O)
 Gui, Add, CheckBox, Checked vLink, Ctrl+Q - Links 2 activities (Alt+E+K)
 Gui, Add, CheckBox, Checked vRenameEnd, F2 - Renames field and goes to the end of the text
@@ -218,21 +219,6 @@ XButton1 & WheelDown::PgDn
 XButton1 & WheelUp::PgUp
 return
 #If
-;=============================================================================================
-;Keyboard Volume_Down scrolls down in P6
-;=============================================================================================
-#IfWinActive ahk_class TDevxMainForm
-Volume_Down::
-	Send, {CtrlDown}{WheelDown}
-	Sleep 500
-	Send, {Click}
-return
-Volume_Up::
-	Send {CtrlDown}{WheelUp}
-	Sleep, 500
-	Send, {Click}
-return
-#IfWinActive
 
 ;=============================================================================================
 ;Ctrl+Shift+f opens the filters window (Alt+e+k )
@@ -247,7 +233,8 @@ return
 ;=============================================================================================
 ;ctrl+shift+d opens user preferences and changes duraton format in weeks 
 ;=============================================================================================
-#ifwinactive ahk_exe pm.exe
+
+#If (DurationInWeeks && WinActive("ahk_exe pm.exe"))
 ^+w::
 	send {altdown}e 
 	sleep 100
@@ -261,11 +248,11 @@ return
 	sleep 100
 	send {enter}
 return
-#ifwinactive
+#If
 ;=============================================================================================
 ;ctrl+shift+d opens user preferences and changes duraton format in days 
 ;=============================================================================================
-#ifwinactive ahk_exe pm.exe
+#If (DurationInDays && WinActive("ahk_exe pm.exe"))
 ^+d::
 	send {altdown}e 
 	sleep 100
@@ -279,11 +266,11 @@ return
 	sleep 100
 	send {enter}
 return
-#ifwinactive
+#If
 ;=============================================================================================
 ;Ctrl+Shift+a opens the layouts window (Alt+e+k )
 ;=============================================================================================
-#IfWinActive ahk_class TDevxMainForm
+#If (OpenLayouts && WinActive("ahk_class TDevxMainForm"))
 ^+a::
 	Send {AltDown}v 
 	Sleep 100
@@ -292,11 +279,11 @@ return
 	Send {Down}{AltUp}
 	Send {Enter}
 return
-#IfWinActive
+#If
 ;=============================================================================================
 ;F6:Disolves Activities (Alt+e+o )
 ;=============================================================================================
-#IfWinActive ahk_class TDevxMainForm
+#If (Disolve && WinActive("ahk_class TDevxMainForm"))
 F6::
 	;Loop 10
 	;{	Sleep 500
@@ -309,11 +296,11 @@ F6::
 		Send o
 	;}
 return
-#IfWinActive
+#If
 ;=============================================================================================
 ;Ctrl+q Links Activities (Alt+e+k )
 ;=============================================================================================
-#IfWinActive ahk_class TDevxMainForm
+#If (Link && WinActive("ahk_class TDevxMainForm"))
 ^q::
 	;Loop 10
 	;{	Sleep 500
@@ -326,7 +313,7 @@ return
 		Send k{AltUp}
 	;}
 return
-#IfWinActive
+#If
 
 ;=============================================================================================
 ;F1 text macro adds .COW to the end of the text
@@ -346,17 +333,18 @@ return
 ;F2 goes to the end of the text rather the beginning
 ;=============================================================================================
 ;#IfWinActive ahk_class TDevxMainForm
-;F2::
-	;Send {F2} 
-	;Sleep 100
-	;Send {End}
-;return
-;#IfWinActive
+#If (RenameEnd && WinActive("ahk_class TDevxMainForm"))
+F2::
+	Send {F2} 
+	Sleep 100
+	Send {End}
+return
+#If
 
 ;=============================================================================================
 ;Delete and press y when pressing delete
 ;=============================================================================================
-#IfWinActive ahk_exe PM.exe
+#If (Delete && WinActive("ahk_exe pm.exe"))
 +Delete::
 Send {Delete} 
 	WinWait, ahk_class TfrmERMsg, 
@@ -365,7 +353,7 @@ Send {Delete}
 	;Sleep 1000
 Send {y}
 return
-#IfWinActive
+#If
 
 ;=============================================================================================
 ;Middle click sends click and ctrl+tab to expand and contract a node
