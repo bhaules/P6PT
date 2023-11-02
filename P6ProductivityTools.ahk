@@ -58,6 +58,11 @@ ExitApp
 CheckSub:
 Gui, Submit, NoHide
 return
+
+MouseIsOver(WinTitle) {
+    MouseGetPos,,, Win
+    return WinExist(WinTitle . " ahk_id " . Win)
+}
 ;;=============================================================================================
 ; Enter presses Enter and goes dowon one row
 ;=============================================================================================
