@@ -23,6 +23,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 Menu, Tray, Icon, Icons/P6PT.ico
 
 Gui, New, hwndhGui AlwaysOnTop Resize MinSize ; always on top
+Gui, Add, Text,, P6 Shortcuts
 Gui, Add, CheckBox, Checked vEnterGoes1Row gCheckSub, Enter - Enter and go down 1 row
 Gui, Add, CheckBox, Checked vScrollHorisontalWithMouse gCheckSub, Scroll left/right with the mouse
 Gui, Add, CheckBox, Checked vScrollOnePageWithMouse gCheckSub, Scroll Scroll one page up/down with the mouse
